@@ -1,0 +1,78 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_maintenance_tree" model="ir.ui.view">
+        <field name="name">property.maintenance.tree</field>
+        <field name="model">property.maintenance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="tenant_id"/>
+                <field name="property_id"/>
+                <field name="assign"/>
+                <field name="maintenance_type"/>
+                <field name="maintenance_date"/>
+                <field name="payment_line_id"/>
+                <field name="charge"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_maintenance_form" model="ir.ui.view">
+        <field name="name">property.maintenance.form</field>
+        <field name="model">property.maintenance</field>
+        <field name="arch" type="xml">
+            <form string="Maintenance Request">
+                <header>
+                    <button name="button_confirm" string="Assign" type="object" 
+                            class="btn-primary" icon="fa-check" 
+                            invisible="status != 'draft'"/>
+                    <button name="mark_as_completed" string="Complete" type="object" 
+                            class="btn-success" icon="fa-check-double" 
+                            invisible="status != 'assigned'"/>
+                    <button name="create_payment_line" type="object" 
+                            class="oe_stat_button btn btn-primary" 
+                            icon="fa-money" 
+                            invisible="status != 'completed'">
+                        <span>Create Payment Line</span> <!-- Text on the button -->
+                    </button>
+                    <field name="status" widget="statusbar" 
+                           statusbar_visible="draft,assigned,completed,canceled"
+                           statusbar_colors="draft:gray;assigned:blue;completed:green;canceled:red"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="tenant_id"/>
+                        <field name="property_id"/>
+                        <field name="lease_id"/>
+                        <field name="assign"/>
+                        <field name="maintenance_type"/>
+                        <field name="maintenance_date"/>
+                        <field name="charge"/>
+                        <field name="status"/>
+                    </group>
+                    <group>
+                        <field name="payment_line_id" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_maintenance_management" model="ir.actions.act_window">
+        <field name="name">Maintenance Requests</field>
+        <field name="res_model">property.maintenance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_maintenance_tree"/>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="maintenance_management_menu" 
+              name="Maintenance Requests" 
+              parent="property_management_menu" 
+              action="action_maintenance_management"/>
+</odoo>

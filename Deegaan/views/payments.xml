@@ -1,0 +1,79 @@
+<odoo>
+    <!-- Payment Tree View -->
+    <record id="view_payment_tree" model="ir.ui.view">
+        <field name="name">property.payment.tree</field>
+        <field name="model">property.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reference"/>
+                <field name="payment_type"/>
+                <field name="tenant_id"/>
+                <field name="property_id"/>
+                <field name="lease_id"/>
+                <field name="payment_date"/>
+                <field name="invoice_id"/> 
+                <field name="amount"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+<!-- Payment Form View -->
+<record id="view_payment_form" model="ir.ui.view">
+    <field name="name">property.payment.form</field>
+    <field name="model">property.payment</field>
+    <field name="arch" type="xml">
+        <form string="Payment">
+            <header>
+                <button name="action_confirm" string="Confirm" type="object" 
+                        class="btn-primary" icon="fa-check" invisible="status != 'draft'"/>
+                <button name="action_cancel" string="Cancel" type="object" 
+                        class="btn-secondary" icon="fa-times" invisible="status != 'draft' and status != 'confirmed'"/>
+                <button name="action_create_invoice" string="Create Invoice" type="object" 
+                        class="btn-success" icon="fa-file-invoice-dollar" invisible="status != 'confirmed'"/>
+                <button name="update_status_to_paid" string="Mark as Paid" type="object" 
+                        class="btn-success" icon="fa-file-invoice-dollar" context="{'default_status': 'paid'}"/>
+                <field name="status" widget="statusbar" 
+                       statusbar_visible="draft,confirmed,invoiced,paid,canceled" 
+                       statusbar_colors="draft:gray;confirmed:green;invoiced:blue;paid:orange;canceled:red"/>
+
+            </header>
+            <sheet>
+                <group>
+                    <field name="reference" readonly="1"/> <!-- Display the Payment Reference -->
+                    <field name="tenant_id"/>
+                    <field name="property_id"/>
+                    <field name="lease_id"/>
+                    <field name="payment_type"/>
+                    <field name="amount"/>
+                    <field name="payment_date"/>
+                </group>
+                <notebook>
+                    <page string="Invoice">
+                        <field name="invoice_id" widget="one2many_list"/>
+                    </page>
+                    <page string="Accounting">
+                        <field name="related_payments" widget="one2many_list"/>
+                    </page>
+                </notebook>
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+        </form>
+    </field>
+</record>
+
+
+    <!-- Payment Action -->
+    <record id="action_payment_management" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">property.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_payment_tree"/>
+    </record>
+
+    <!-- Payment Menu -->
+    <menuitem id="payment_management_menu" name="Payments" parent="property_management_menu" action="action_payment_management"/>
+</odoo>

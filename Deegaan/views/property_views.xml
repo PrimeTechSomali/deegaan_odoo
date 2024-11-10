@@ -1,0 +1,104 @@
+<odoo>
+    <record id="view_property_tree" model="ir.ui.view">
+        <field name="name">property.management.tree</field>
+        <field name="model">property.management</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="location"/>
+                <field name="type"/>
+                <field name="rent"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+<record id="view_property_form" model="ir.ui.view">
+    <field name="name">property.management.form</field>
+    <field name="model">property.management</field>
+    <field name="arch" type="xml">
+        <form string="Property">
+            <header>
+                <!-- Add other header buttons or status bar as needed -->
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <h1>Property Information</h1>
+                </div>
+                
+                <!-- Main Property Information -->
+                <div class="oe_property_info" style="display: flex; justify-content: space-between;">
+                    <div style="flex-grow: 1;">
+                        <group>
+                            <field name="name" required="1" placeholder="Enter property name"/>
+                            <field name="location" required="1" placeholder="Enter property location"/>  
+                            <field name="type" required="1" placeholder="Select property type"/>    
+                            <field name="rent" required="1" placeholder="Monthly Rent"/>      
+                            <field name="description" placeholder="Enter a brief description of the property"/>
+                        </group>
+                    </div>
+                    <div style="margin-left: 20px; max-width: 200px;">
+                        <field name="image" widget="image" options="{'preview_image': 'image'}"/>
+                    </div>
+                </div>
+
+                <!-- Tabs for Related Information -->
+                <notebook>
+                    <!-- Tab for Leases -->
+                    <page string="Leases">
+                        <field name="lease_ids" widget="one2many_list">
+                            <tree editable="bottom">
+                                <field name="tenant_id" string="Tenant Name"/>
+                                <field name="start_date" string="Start Date"/>
+                                <field name="end_date" string="End Date"/>
+                                <field name="rent_amount" string="Monthly Rent"/>
+                                <field name="status" string="Status"/>
+                                <field name="security_deposit" string="Deposit"/>
+                            </tree>
+                        </field>
+                    </page>
+                    
+                    <!-- Tab for Assets -->
+                    <page string="Assets">
+                        <field name="asset_ids" widget="one2many_list">
+                            <tree editable="bottom">
+                                <field name="name" string="Asset Name"/>
+                                <field name="asset_type" string="Asset Type"/>
+                                <field name="value" string="Asset Value"/>
+                                <field name="description" string="Description"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <!-- Tab for Payments -->
+                    <page string="Payments">
+                        <field name="payment_ids" widget="one2many_list">
+                            <tree editable="bottom">
+                                <field name="tenant_id" string="Tenant Name"/>
+                                <field name="property_id" string="Property Name"/>
+                                <field name="payment_date" string="Payment Date"/>
+                                <field name="amount" string="Amount"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </sheet>
+            <!-- Chatter Section -->
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+        </form>
+    </field>
+</record>
+
+    <record id="action_property_management" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="res_model">property.management</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_property_tree"/>
+    </record>
+
+    <menuitem id="property_management_menu" name="Property Management"/>
+    <menuitem id="property_management_properties_menu" name="Properties" parent="property_management_menu" action="action_property_management"/>
+</odoo>

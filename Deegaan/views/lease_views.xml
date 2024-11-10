@@ -1,0 +1,103 @@
+<odoo>
+    <!-- Tree View Definition -->
+    <record id="view_lease_tree" model="ir.ui.view">
+        <field name="name">property.lease.tree</field>
+        <field name="model">property.lease</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="property_id"/>
+                <field name="tenant_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="rent_amount"/>
+                <field name="security_deposit"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View Definition -->
+    <record id="view_lease_form" model="ir.ui.view">
+        <field name="name">property.lease.form</field>
+        <field name="model">property.lease</field>
+        <field name="arch" type="xml">
+            <form string="Lease">
+                <header>
+                    <div class="o_button_box">
+                        <button name="action_confirm" type="object"
+                                class="btn-primary" icon="fa-check"
+                                string="Confirm Lease"
+                                invisible="status != 'draft'"
+                                style="margin-right: 10px;"/>
+
+                        <button name="action_terminate" type="object"
+                                class="btn-secondary" icon="fa-times"
+                                string="Terminate Lease"
+                                invisible="status != 'active'"
+                                style="margin-right: 10px;"/>
+
+                        <button name="action_view_payments" type="object" 
+                                class="oe_stat_button btn btn-primary" 
+                                icon="fa-money" string="View Payments">
+                            <field name="payment_count" widget="statinfo" string=" Payments"/>
+                        </button>
+                    </div>
+
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="draft,active,expired,terminated"
+                           statusbar_colors="draft:orange;active:green;expired:gray;terminated:red"
+                           class="o_statusbar"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="property_id"/>
+                        <field name="tenant_id"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="rent_amount"/>
+                        <field name="security_deposit"/>
+                        <field name="lease_terms"/>
+                    </group>
+                
+                <notebook>
+                    <page string="Payments">
+                        <field name="payment_ids" widget="one2many_list" context="{'default_lease_id': id}"/>
+                    </page>
+                    <page string="Utility">
+                        <field name="utility_ids" widget="one2many_list" context="{'default_lease_id': id}"/>
+                    </page>
+                    <page string="Documents">
+                        <field name="document_ids" widget="one2many_list" context="{'default_lease_id': id}"/>
+                    </page>
+                </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Payments -->
+    <record id="action_view_payments" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">property.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('lease_id', '=', active_id)]</field>
+        <field name="context">{'default_lease_id': active_id}</field>
+    </record>
+
+    <!-- Action for Lease Management -->
+    <record id="action_lease_management" model="ir.actions.act_window">
+        <field name="name">Leases</field>
+        <field name="res_model">property.lease</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_lease_tree"/>
+    </record>
+
+    <!-- Menu Item for Lease Management -->
+    <menuitem id="lease_management_menu" name="Lease Management" parent="property_management_menu" action="action_lease_management"/>
+</odoo>

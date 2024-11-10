@@ -1,0 +1,87 @@
+<odoo>
+    <record id="view_tenant_tree" model="ir.ui.view">
+        <field name="name">property.tenant.tree</field>
+        <field name="model">property.tenant</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+<record id="view_tenant_form" model="ir.ui.view">
+    <field name="name">property.tenant.form</field>
+    <field name="model">property.tenant</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <div class="oe_title">
+                    <h1>TENANCY</h1>
+                </div>
+                
+                <!-- Main Tenant Information -->
+                <div style="display: flex; justify-content: space-between;">
+                    <div style="flex-grow: 1;">
+                        <group>
+                            <field name="name" placeholder="Enter tenant name"/>
+                            <field name="phone" placeholder="Enter phone number"/>
+                            <field name="email" placeholder="Enter email address"/>
+                            <field name="address" placeholder="Enter address"/>
+                            <field name="status" placeholder="Select status"/>
+                            <!-- New fields added here -->
+                            <field name="total_payments_invoiced" readonly="1"/>
+                            <field name="balance" readonly="1"/>
+                        </group>
+                    </div>
+                    <div style="margin-left: 20px; max-width: 200px;">
+                        <field name="image" widget="image" options="{'preview_image': 'image'}"/>
+                    </div>                    
+                </div>
+
+                <!-- Tabs for Related Information -->
+                <notebook>
+                    <page string="Documents">
+                        <field name="document_ids" widget="one2many_list"/>
+                    </page>
+                    <page string="Leases">
+                        <field name="lease_ids" widget="one2many_list"/>
+                    </page>
+                    <page string="Fees">
+                        <field name="payment_ids" widget="one2many_list"/>
+                        <!-- Optionally add the dynamic payments field -->
+                    </page>
+                    <page string="Maintinance">
+                        <field name="maintenance_ids" widget="one2many_list"/>
+                    </page>
+                    <page string="Utilities">
+                        <field name="utility_ids" widget="one2many_list"/>
+                    </page>
+                    <page string="Guarantors">
+                        <field name="guarantor_ids" widget="one2many_list"/>
+                    </page>
+                    <page string="Payments">
+                        <field name="related_payments" widget="one2many_list"/>
+                    </page>
+                </notebook>
+            </sheet>
+            <!-- Chatter Section -->
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+        </form>
+    </field>
+</record>
+
+    <record id="action_tenant_management" model="ir.actions.act_window">
+        <field name="name">Tenants</field>
+        <field name="res_model">property.tenant</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_tenant_tree"/>
+    </record>
+
+    <menuitem id="tenant_management_menu" name="Tenant Management" parent="property_management_menu" action="action_tenant_management"/>
+</odoo>

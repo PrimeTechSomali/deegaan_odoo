@@ -1,0 +1,191 @@
+<odoo>
+    <!-- Top-level Property Management Menu -->
+    <menuitem id="property_management_menu" name="Property Management" sequence="10"/>
+
+    <!-- Updated Form View for Dashboard -->
+    <record id="view_property_dashboard_form" model="ir.ui.view">
+        <field name="name">property.dashboard.form</field>
+        <field name="model">property.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Property Dashboard">
+            <div class="row">
+                <!-- Card for Total Properties -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-building"></i> Total Properties</h5>
+                            <p class="card-text"><field name="total_properties" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Total Available Properties -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-home"></i> Total Available Properties</h5>
+                            <p class="card-text"><field name="total_available_properties" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Total Utility Income -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-dollar-sign"></i> Total Utility Income</h5>
+                            <p class="card-text"><field name="total_utility_income" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Total Maintenance Income -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-wrench"></i> Total Maintenance Income</h5>
+                            <p class="card-text"><field name="total_maintenance_income" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Total Payments Invoiced -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-file-invoice-dollar"></i> Total Payments Invoiced</h5>
+                            <p class="card-text"><field name="total_payments_invoiced" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Total Draft Payments -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-file-invoice"></i> Total Draft Payments</h5>
+                            <p class="card-text"><field name="total_draft_payments" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Electricity Usage -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-bolt"></i> Electricity Usage</h5>
+                            <p class="card-text"><field name="electricity_usage" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card for Water Usage -->
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: #007bff; color: #ffffff;">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fa fa-tint"></i> Water Usage</h5>
+                            <p class="card-text"><field name="water_usage" readonly="1"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <div class="row">
+                    <!-- Total Properties Overview Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Properties Overview</h5>
+                                <div class="chart" name="properties_overview"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Income Breakdown Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Income Breakdown</h5>
+                                <div class="chart" name="income_breakdown"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Tenant Statistics Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Tenant Statistics</h5>
+                                <div class="chart" name="tenant_statistics"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Utility Usage Comparison Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Utility Usage Comparison</h5>
+                                <div class="chart" name="utility_usage_comparison"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Recent Transactions Table -->
+                    <div class="col-md-12 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Recent Transactions</h5>
+                                <tree string="Recent Transactions" editable="bottom">
+                                    <field name="recent_tenants"/>
+                                    <field name="recent_payments"/>
+                                    <field name="recent_maintenances"/>
+                                </tree>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Active Leases Status Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Leases Status</h5>
+                                <div class="chart" name="active_leases_status"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Payments Analysis Chart -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Payments Analysis</h5>
+                                <div class="chart" name="payments_analysis"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Monthly Utility Usage Trend Chart -->
+                    <div class="col-md-12 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Monthly Utility Usage Trend</h5>
+                                <div class="chart" name="monthly_utility_usage_trend"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Dashboard -->
+    <record id="action_property_dashboard" model="ir.actions.act_window">
+        <field name="name">Property Dashboard</field>
+        <field name="res_model">property.dashboard</field>
+        <field name="view_mode">form,tree</field>
+        <field name="target">current</field>
+        <field name="view_id" ref="view_property_dashboard_form"/>
+    </record>
+
+    <!-- Menu Item for Dashboard -->
+    <menuitem id="property_dashboard_menu" name="Dashboard" parent="property_management_menu" action="action_property_dashboard"/>
+</odoo>

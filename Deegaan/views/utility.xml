@@ -1,0 +1,88 @@
+<odoo>
+    <record id="view_utility_record_tree" model="ir.ui.view">
+        <field name="name">property.utility.record.tree</field>
+        <field name="model">property.utility.record</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="tenant_id"/>
+                <field name="property_id"/>
+                <field name="lease_id"/>
+                <field name="utility_type"/>
+                <field name="previous_reading"/>
+                <field name="current_reading"/>
+                <field name="rate"/>
+                <field name="amount_used"/>
+                <field name="subtotal"/>
+                <field name="payment_line_id"/>
+                <field name="reading_date"/>
+            </tree>
+        </field>
+    </record>
+
+<record id="view_utility_record_form" model="ir.ui.view">
+    <field name="name">property.utility.record.form</field>
+    <field name="model">property.utility.record</field>
+    <field name="arch" type="xml">
+        <form string="Utility Record">
+            <header>
+                <!-- Show Confirm and Cancel buttons only when status is draft -->
+                <button name="action_confirm" string="Confirm" type="object" 
+                        class="btn-primary" icon="fa-check" 
+                        invisible="status != 'draft' or status == 'paid'"/>
+
+                <button name="action_cancel" string="Cancel" type="object" 
+                        class="btn-secondary" icon="fa-times" 
+                        invisible="status != 'draft' or status == 'paid'"/>
+
+                <!-- Show Create Payment Line button only when status is confirmed -->
+                <button name="create_payment_line" string="Create Payment Line" type="object" 
+                        class="btn-success" icon="fa-money" 
+                        invisible="status != 'confirmed' or status == 'paid'"/>
+
+                <!-- Allow moving back to draft from confirmed -->
+                <button name="action_set_to_draft" string="Set to Draft" type="object" 
+                        class="btn-secondary" icon="fa-undo" 
+                        invisible="status != 'confirmed' or status == 'paid'"/>
+
+                <!-- Statusbar to display the current status of the record -->
+                <field name="status" widget="statusbar" 
+                    statusbar_visible="draft,confirmed,canceled,paid" 
+                    statusbar_colors="draft:gray;confirmed:green;canceled:red;paid:blue"/>
+            </header>
+            <br/>
+            <sheet>
+                <group>
+                    <field name="tenant_id"/>
+                    <field name="property_id"/>
+                    <field name="lease_id"/>
+                    <field name="utility_type"/>
+                    <field name="previous_reading"/>
+                    <field name="current_reading"/>
+                    <field name="rate"/>
+                    <field name="amount_used" readonly="1"/>
+                    <field name="subtotal" readonly="1"/>
+                    <field name="reading_date"/>
+                </group>
+                <group>
+                    <field name="payment_line_id"/>
+                </group>
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+        </form>
+    </field>
+</record>
+
+
+
+    <record id="action_utility_record_management" model="ir.actions.act_window">
+        <field name="name">Utility Records</field>
+        <field name="res_model">property.utility.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_utility_record_tree"/>
+    </record>
+
+    <menuitem id="utility_record_management_menu" name="Utility Records" parent="property_management_menu" action="action_utility_record_management"/>
+</odoo>
